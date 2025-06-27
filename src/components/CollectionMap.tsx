@@ -82,7 +82,7 @@ export const CollectionMap = () => {
           <Card className="h-96 mb-6">
             <CardContent className="h-full p-0">
               <div className="h-full bg-gradient-to-br from-green-100 to-blue-100 rounded-lg flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.1"%3E%3Ccircle cx="15" cy="15" r="2"/%3E%3Ccircle cx="45" cy="15" r="2"/%3E%3Ccircle cx="15" cy="45" r="2"/%3E%3Ccircle cx="45" cy="45" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%239C92AC\" fill-opacity=\"0.1\"%3E%3Ccircle cx=\"15\" cy=\"15\" r=\"2\"/%3E%3Ccircle cx=\"45\" cy=\"15\" r=\"2\"/%3E%3Ccircle cx=\"15\" cy=\"45\" r=\"2\"/%3E%3Ccircle cx=\"45\" cy=\"45\" r=\"2\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
                 
                 {/* Simulated map markers */}
                 <div className="absolute inset-0">
@@ -215,7 +215,7 @@ export const CollectionMap = () => {
                   <div>• Collectez tôt le matin pour de meilleurs prix</div>
                   <div>• Triez sur place pour économiser du temps</div>
                   <div>• Vérifiez la météo avant de sortir</div>
-                  <div>• Utilisez l'app pour signaler votre position</div>
+                  <div>• Utilisez l&apos;app pour signaler votre position</div>
                 </div>
               </div>
               
