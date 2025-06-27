@@ -1,295 +1,285 @@
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, Trophy, MessageCircle, Heart, Share2, Award, TrendingUp, Globe } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Trophy, Users, TrendingUp, MessageCircle, Heart, Share2, Star } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAuth } from "@/contexts/AuthContext";
+import { UserProfile } from "@/components/UserProfile";
+import { AuthModal } from "@/components/AuthModal";
+import { ProtectedAction } from "@/components/ProtectedAction";
+import { useState } from "react";
 
 const Community = () => {
-  const [activeTab, setActiveTab] = useState("leaderboard");
+  const { isAuthenticated } = useAuth();
+  const [showAuth, setShowAuth] = useState(false);
 
   const leaderboard = [
-    { rank: 1, name: "Marie Dupont", points: 15420, badge: "Éco-Champion", avatar: "MD", location: "Paris" },
-    { rank: 2, name: "Pierre Martin", points: 14890, badge: "Super Collecteur", avatar: "PM", location: "Lyon" },
-    { rank: 3, name: "Sophie Blanc", points: 13650, badge: "Green Hero", avatar: "SB", location: "Marseille" },
-    { rank: 4, name: "Thomas Rousseau", points: 12340, badge: "Recycleur Pro", avatar: "TR", location: "Toulouse" },
-    { rank: 5, name: "Julie Moreau", points: 11890, badge: "Éco-Warrior", avatar: "JM", location: "Nice" }
+    { rank: 1, name: "Marie Dupont", points: 15420, level: 8, avatar: "", wasteCollected: "2.3t" },
+    { rank: 2, name: "Jean Martin", points: 12150, level: 7, avatar: "", wasteCollected: "1.8t" },
+    { rank: 3, name: "Sophie Bernard", points: 9870, level: 6, avatar: "", wasteCollected: "1.5t" },
+    { rank: 4, name: "Pierre Moreau", points: 8420, level: 6, avatar: "", wasteCollected: "1.2t" },
+    { rank: 5, name: "Anne Leroy", points: 7650, level: 5, avatar: "", wasteCollected: "1.1t" }
   ];
 
-  const posts = [
+  const activities = [
     {
       id: 1,
-      author: "Marie Dupont",
-      avatar: "MD",
+      user: "Marie Dupont",
+      action: "a collecté 15kg de plastique",
       time: "il y a 2h",
-      content: "Incroyable journée de collecte ! J'ai réussi à collecter 15kg de plastique dans le parc central. La zone était vraiment productive aujourd'hui !",
-      likes: 24,
-      comments: 8,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop"
+      points: 150,
+      likes: 12,
+      comments: 3
     },
     {
       id: 2,
-      author: "Pierre Martin",
-      avatar: "PM",
+      user: "Jean Martin",
+      action: "a atteint le niveau 7",
       time: "il y a 4h",
-      content: "Astuce du jour : Les déchets métalliques se trouvent plus facilement près des zones de construction. Pensez à vérifier les chantiers abandonnés !",
-      likes: 31,
-      comments: 12
+      points: 0,
+      likes: 8,
+      comments: 1
     },
     {
       id: 3,
-      author: "Sophie Blanc",
-      avatar: "SB",
+      user: "Sophie Bernard",
+      action: "a échangé 500 points contre une récompense",
       time: "il y a 6h",
-      content: "Qui veut rejoindre notre groupe de collecte demain matin ? On vise la zone commerciale du centre-ville. Plus on est nombreux, plus on collecte !",
-      likes: 18,
-      comments: 15
+      points: -500,
+      likes: 15,
+      comments: 5
     }
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2 gradient-eco bg-clip-text text-transparent">Communauté HackaFako</h1>
-        <p className="text-gray-600 text-lg">Connectez-vous avec d'autres éco-collecteurs et partagez vos succès</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-green-900 transition-all duration-500">
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 glass-effect border-b border-green-100 dark:border-green-800/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-4">
+              <Link to="/" className="flex items-center text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
+                <ArrowLeft className="h-5 w-5 mr-2" />
+                Retour
+              </Link>
+              <h1 className="text-xl font-bold gradient-eco bg-clip-text text-transparent">Communauté</h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <ThemeToggle />
+              {isAuthenticated ? (
+                <UserProfile />
+              ) : (
+                <Button 
+                  onClick={() => setShowAuth(true)}
+                  variant="outline"
+                  className="border-green-500 dark:border-green-400 text-green-600 dark:text-green-400"
+                >
+                  Se connecter
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
 
-      {/* Navigation Tabs */}
-      <div className="flex gap-4 mb-8 border-b border-gray-200">
-        <button
-          onClick={() => setActiveTab("leaderboard")}
-          className={`pb-4 px-2 font-medium transition-colors ${
-            activeTab === "leaderboard" 
-              ? "text-green-600 border-b-2 border-green-600" 
-              : "text-gray-600 hover:text-green-600"
-          }`}
-        >
-          <Trophy className="inline h-4 w-4 mr-2" />
-          Classement
-        </button>
-        <button
-          onClick={() => setActiveTab("feed")}
-          className={`pb-4 px-2 font-medium transition-colors ${
-            activeTab === "feed" 
-              ? "text-green-600 border-b-2 border-green-600" 
-              : "text-gray-600 hover:text-green-600"
-          }`}
-        >
-          <MessageCircle className="inline h-4 w-4 mr-2" />
-          Fil d'actualité
-        </button>
-        <button
-          onClick={() => setActiveTab("groups")}
-          className={`pb-4 px-2 font-medium transition-colors ${
-            activeTab === "groups" 
-              ? "text-green-600 border-b-2 border-green-600" 
-              : "text-gray-600 hover:text-green-600"
-          }`}
-        >
-          <Users className="inline h-4 w-4 mr-2" />
-          Groupes
-        </button>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Community Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <Card className="glass-effect border-green-100 dark:border-green-800/30">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-4">
+                <div className="gradient-eco p-3 rounded-full">
+                  <Users className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">12,547</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Membres actifs</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2">
-          {activeTab === "leaderboard" && (
-            <div className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Trophy className="h-5 w-5 text-yellow-500" />
-                    Top Collecteurs du Mois
-                  </CardTitle>
-                  <CardDescription>Les champions de la collecte écologique</CardDescription>
-                </CardHeader>
-                <CardContent>
+          <Card className="glass-effect border-blue-100 dark:border-blue-800/30">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-4">
+                <div className="bg-blue-500 p-3 rounded-full">
+                  <TrendingUp className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">2.3M kg</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Déchets collectés</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="glass-effect border-yellow-100 dark:border-yellow-800/30">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-4">
+                <div className="gradient-gold p-3 rounded-full">
+                  <Trophy className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">€847K</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Revenus générés</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Tabs defaultValue="leaderboard" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsTrigger value="leaderboard" className="flex items-center gap-2">
+              <Trophy className="h-4 w-4" />
+              Classement
+            </TabsTrigger>
+            <TabsTrigger value="activity" className="flex items-center gap-2">
+              <MessageCircle className="h-4 w-4" />
+              Activité
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="leaderboard">
+            <Card className="glass-effect">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Trophy className="h-5 w-5 text-yellow-500" />
+                  Top Collecteurs
+                </CardTitle>
+                <CardDescription>
+                  Les membres les plus actifs de notre communauté
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ProtectedAction
+                  fallback={
+                    <div className="text-center py-8">
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        Connectez-vous pour voir le classement complet
+                      </p>
+                      <Button onClick={() => setShowAuth(true)} className="gradient-eco text-white">
+                        Se connecter
+                      </Button>
+                    </div>
+                  }
+                >
                   <div className="space-y-4">
                     {leaderboard.map((user) => (
-                      <div key={user.rank} className="flex items-center gap-4 p-4 bg-gradient-to-r from-green-50 to-yellow-50 rounded-lg hover:shadow-md transition-shadow">
-                        <div className="flex items-center justify-center w-8 h-8 bg-gradient-eco rounded-full text-white font-bold">
-                          {user.rank}
-                        </div>
-                        <Avatar>
-                          <AvatarFallback className="bg-green-100 text-green-600 font-medium">
-                            {user.avatar}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <div className="font-semibold">{user.name}</div>
-                          <div className="text-sm text-gray-600">{user.location}</div>
+                      <div key={user.rank} className="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-700/30 transition-all duration-300">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                            user.rank === 1 ? 'bg-yellow-500 text-white' :
+                            user.rank === 2 ? 'bg-gray-400 text-white' :
+                            user.rank === 3 ? 'bg-amber-600 text-white' :
+                            'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                          }`}>
+                            {user.rank}
+                          </div>
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={user.avatar} />
+                            <AvatarFallback className="gradient-eco text-white">
+                              {user.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <div className="font-semibold">{user.name}</div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                              Niveau {user.level} • {user.wasteCollected} collectés
+                            </div>
+                          </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-green-600">{user.points.toLocaleString()} pts</div>
-                          <Badge variant="outline" className="mt-1">{user.badge}</Badge>
+                          <div className="flex items-center gap-1">
+                            <Star className="h-4 w-4 text-yellow-500" />
+                            <span className="font-bold">{user.points.toLocaleString()}</span>
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">points</div>
                         </div>
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+                </ProtectedAction>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-          {activeTab === "feed" && (
-            <div className="space-y-6">
-              {posts.map((post) => (
-                <Card key={post.id} className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <Avatar>
-                        <AvatarFallback className="bg-green-100 text-green-600 font-medium">
-                          {post.avatar}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="font-semibold">{post.author}</span>
-                          <span className="text-gray-500 text-sm">•</span>
-                          <span className="text-gray-500 text-sm">{post.time}</span>
-                        </div>
-                        <p className="text-gray-700 mb-4">{post.content}</p>
-                        {post.image && (
-                          <img 
-                            src={post.image} 
-                            alt="Post image" 
-                            className="w-full h-48 object-cover rounded-lg mb-4"
-                          />
-                        )}
-                        <div className="flex items-center gap-6 pt-4 border-t border-gray-100">
-                          <button className="flex items-center gap-2 text-gray-600 hover:text-green-600 transition-colors">
-                            <Heart className="h-4 w-4" />
-                            <span>{post.likes}</span>
-                          </button>
-                          <button className="flex items-center gap-2 text-gray-600 hover:text-green-600 transition-colors">
-                            <MessageCircle className="h-4 w-4" />
-                            <span>{post.comments}</span>
-                          </button>
-                          <button className="flex items-center gap-2 text-gray-600 hover:text-green-600 transition-colors">
-                            <Share2 className="h-4 w-4" />
-                            Partager
-                          </button>
-                        </div>
-                      </div>
+          <TabsContent value="activity">
+            <Card className="glass-effect">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageCircle className="h-5 w-5 text-blue-500" />
+                  Activité de la Communauté
+                </CardTitle>
+                <CardDescription>
+                  Les dernières actions des membres
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ProtectedAction
+                  fallback={
+                    <div className="text-center py-8">
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        Connectez-vous pour voir l'activité de la communauté
+                      </p>
+                      <Button onClick={() => setShowAuth(true)} className="gradient-eco text-white">
+                        Se connecter
+                      </Button>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-
-          {activeTab === "groups" && (
-            <div className="space-y-4">
-              <Card className="border-green-200">
-                <CardHeader>
-                  <CardTitle>Groupes de Collecte</CardTitle>
-                  <CardDescription>Rejoignez des équipes locales pour maximiser vos gains</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {[
-                      { name: "Éco-Warriors Paris", members: 45, location: "Paris", specialty: "Plastique & Métal" },
-                      { name: "Green Team Lyon", members: 32, location: "Lyon", specialty: "Organique" },
-                      { name: "Collecteurs Marseille", members: 28, location: "Marseille", specialty: "Tous types" }
-                    ].map((group, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                        <div>
-                          <div className="font-semibold">{group.name}</div>
-                          <div className="text-sm text-gray-600">{group.location} • {group.members} membres</div>
-                          <div className="text-sm text-green-600">Spécialité: {group.specialty}</div>
+                  }
+                >
+                  <div className="space-y-6">
+                    {activities.map((activity) => (
+                      <div key={activity.id} className="border-l-2 border-green-200 dark:border-green-800 pl-4 pb-4">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-8 w-8">
+                              <AvatarFallback className="gradient-eco text-white text-xs">
+                                {activity.user.split(' ').map(n => n[0]).join('')}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <div className="text-sm">
+                                <span className="font-semibold">{activity.user}</span>
+                                <span className="text-gray-600 dark:text-gray-400"> {activity.action}</span>
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-500">{activity.time}</div>
+                            </div>
+                          </div>
+                          {activity.points !== 0 && (
+                            <Badge variant={activity.points > 0 ? "default" : "secondary"} className="ml-2">
+                              {activity.points > 0 ? '+' : ''}{activity.points} pts
+                            </Badge>
+                          )}
                         </div>
-                        <Button variant="outline" size="sm">Rejoindre</Button>
+                        <div className="flex items-center gap-4 mt-3 ml-11">
+                          <Button variant="ghost" size="sm" className="h-8 px-2 text-gray-600 dark:text-gray-400">
+                            <Heart className="h-4 w-4 mr-1" />
+                            {activity.likes}
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-8 px-2 text-gray-600 dark:text-gray-400">
+                            <MessageCircle className="h-4 w-4 mr-1" />
+                            {activity.comments}
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-8 px-2 text-gray-600 dark:text-gray-400">
+                            <Share2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Stats Community */}
-          <Card className="gradient-eco text-white">
-            <CardContent className="p-6">
-              <h3 className="font-bold text-lg mb-4">Impact Communautaire</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span>Collecteurs actifs</span>
-                  <span className="font-bold">12,547</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Kg recyclés ce mois</span>
-                  <span className="font-bold">89,432</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>CO₂ économisé</span>
-                  <span className="font-bold">156 tonnes</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Achievements */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Award className="h-5 w-5 text-yellow-500" />
-                Défis du Mois
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="p-3 bg-yellow-50 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium">Collecteur Plastique</span>
-                    <span className="text-sm text-yellow-600">75%</span>
-                  </div>
-                  <div className="w-full bg-yellow-200 rounded-full h-2">
-                    <div className="bg-yellow-500 h-2 rounded-full" style={{width: '75%'}}></div>
-                  </div>
-                  <div className="text-sm text-gray-600 mt-1">75/100 kg collectés</div>
-                </div>
-                
-                <div className="p-3 bg-green-50 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium">Éco-Mentor</span>
-                    <span className="text-sm text-green-600">40%</span>
-                  </div>
-                  <div className="w-full bg-green-200 rounded-full h-2">
-                    <div className="bg-green-500 h-2 rounded-full" style={{width: '40%'}}></div>
-                  </div>
-                  <div className="text-sm text-gray-600 mt-1">2/5 nouveaux aidés</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Actions Rapides</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Button className="w-full gradient-eco text-white">
-                <MessageCircle className="mr-2 h-4 w-4" />
-                Publier un succès
-              </Button>
-              <Button variant="outline" className="w-full">
-                <Users className="mr-2 h-4 w-4" />
-                Créer un groupe
-              </Button>
-              <Button variant="outline" className="w-full">
-                <Globe className="mr-2 h-4 w-4" />
-                Organiser un événement
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+                </ProtectedAction>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
+
+      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
     </div>
   );
 };

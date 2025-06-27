@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,9 +16,15 @@ import { Dashboard } from "@/components/Dashboard";
 import { CollectionMap } from "@/components/CollectionMap";
 import { RewardsShop } from "@/components/RewardsShop";
 import { CommunityStats } from "@/components/CommunityStats";
+import { useAuth } from "@/contexts/AuthContext";
+import { UserProfile } from "@/components/UserProfile";
+import { AuthModal } from "@/components/AuthModal";
+import { ProtectedAction } from "@/components/ProtectedAction";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("accueil");
+  const [showAuth, setShowAuth] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-green-900 transition-all duration-500">
@@ -49,11 +54,24 @@ const Index = () => {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
               </Link>
               <ThemeToggle />
-              <Link to="/get-started">
-                <Button className="gradient-eco text-white hover:opacity-90 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 glow-effect">
-                  Commencer
-                </Button>
-              </Link>
+              {isAuthenticated ? (
+                <UserProfile />
+              ) : (
+                <>
+                  <Button 
+                    onClick={() => setShowAuth(true)}
+                    variant="outline"
+                    className="border-green-500 dark:border-green-400 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30"
+                  >
+                    Se connecter
+                  </Button>
+                  <Link to="/get-started">
+                    <Button className="gradient-eco text-white hover:opacity-90 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 glow-effect">
+                      Commencer
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -97,17 +115,61 @@ const Index = () => {
         </TabsContent>
 
         <TabsContent value="dashboard" className="mt-8 animate-fade-in">
-          <Dashboard />
+          <ProtectedAction
+            fallback={
+              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16">
+                <h2 className="text-2xl font-bold mb-4">Accédez à votre tableau de bord</h2>
+                <p className="text-gray-600 dark:text-gray-400 mb-8">
+                  Connectez-vous pour voir vos statistiques personnelles et suivre vos progrès.
+                </p>
+                <Button onClick={() => setShowAuth(true)} className="gradient-eco text-white">
+                  Se connecter
+                </Button>
+              </div>
+            }
+          >
+            <Dashboard />
+          </ProtectedAction>
         </TabsContent>
 
         <TabsContent value="collecte" className="mt-8 animate-fade-in">
-          <CollectionMap />
+          <ProtectedAction
+            fallback={
+              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16">
+                <h2 className="text-2xl font-bold mb-4">Trouvez des points de collecte</h2>
+                <p className="text-gray-600 dark:text-gray-400 mb-8">
+                  Connectez-vous pour accéder à la carte interactive des points de collecte près de chez vous.
+                </p>
+                <Button onClick={() => setShowAuth(true)} className="gradient-eco text-white">
+                  Se connecter
+                </Button>
+              </div>
+            }
+          >
+            <CollectionMap />
+          </ProtectedAction>
         </TabsContent>
 
         <TabsContent value="recompenses" className="mt-8 animate-fade-in">
-          <RewardsShop />
+          <ProtectedAction
+            fallback={
+              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16">
+                <h2 className="text-2xl font-bold mb-4">Boutique de récompenses</h2>
+                <p className="text-gray-600 dark:text-gray-400 mb-8">
+                  Connectez-vous pour échanger vos points contre des récompenses exclusives.
+                </p>
+                <Button onClick={() => setShowAuth(true)} className="gradient-eco text-white">
+                  Se connecter
+                </Button>
+              </div>
+            }
+          >
+            <RewardsShop />
+          </ProtectedAction>
         </TabsContent>
       </Tabs>
+
+      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
 
       {/* Enhanced Footer */}
       <footer className="bg-gray-900 dark:bg-black text-white mt-20 relative overflow-hidden">

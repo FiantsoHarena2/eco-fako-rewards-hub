@@ -5,9 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Coins, Gift, Star, ShoppingBag, Zap, Award } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const RewardsShop = () => {
-  const [userPoints] = useState(1250);
+  const { user } = useAuth();
+  const userPoints = user?.points || 0;
 
   const rewards = {
     money: [
@@ -86,7 +88,7 @@ export const RewardsShop = () => {
             </div>
             <div className="text-right">
               <Badge className="bg-green-100 text-green-800 mb-2">
-                Niveau 4 - Éco-Héros
+                Niveau {user?.level || 1} - {user?.level >= 4 ? 'Éco-Héros' : 'Apprenti'}
               </Badge>
               <div className="text-sm text-gray-600">Bonus de fidélité: +10%</div>
             </div>
