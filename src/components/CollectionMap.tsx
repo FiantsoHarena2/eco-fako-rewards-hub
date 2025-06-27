@@ -72,7 +72,7 @@ export const CollectionMap = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Zones de Collecte</h1>
+        <h1 className="text-3xl font-bold mb-2 gradient-eco bg-clip-text text-transparent">Zones de Collecte</h1>
         <p className="text-gray-600">Trouvez les meilleures opportunités près de vous</p>
       </div>
 
@@ -82,8 +82,6 @@ export const CollectionMap = () => {
           <Card className="h-96 mb-6">
             <CardContent className="h-full p-0">
               <div className="h-full bg-gradient-to-br from-green-100 to-blue-100 rounded-lg flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%239C92AC\" fill-opacity=\"0.1\"%3E%3Ccircle cx=\"15\" cy=\"15\" r=\"2\"/%3E%3Ccircle cx=\"45\" cy=\"15\" r=\"2\"/%3E%3Ccircle cx=\"15\" cy=\"45\" r=\"2\"/%3E%3Ccircle cx=\"45\" cy=\"45\" r=\"2\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
-                
                 {/* Simulated map markers */}
                 <div className="absolute inset-0">
                   {collectionZones.map((zone, index) => (

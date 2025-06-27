@@ -7,8 +7,10 @@ import {
   MapPin, 
   Award,
   TrendingUp,
-  Home as HomeIcon
+  Home as HomeIcon,
+  Users
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { HeroSection } from "@/components/HeroSection";
 import { Dashboard } from "@/components/Dashboard";
 import { CollectionMap } from "@/components/CollectionMap";
@@ -24,41 +26,57 @@ const Index = () => {
       <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-green-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <div className="gradient-eco p-2 rounded-xl">
+            <Link to="/" className="flex items-center space-x-3">
+              <div className="gradient-eco p-2 rounded-xl shadow-lg">
                 <Leaf className="h-6 w-6 text-white" />
               </div>
               <span className="text-2xl font-bold gradient-eco bg-clip-text text-transparent">
                 HackaFako
               </span>
-            </div>
+            </Link>
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#" className="text-gray-700 hover:text-green-600 transition-colors">Accueil</a>
-              <a href="#" className="text-gray-700 hover:text-green-600 transition-colors">Comment ça marche</a>
-              <a href="#" className="text-gray-700 hover:text-green-600 transition-colors">Communauté</a>
-              <Button className="gradient-eco text-white hover:opacity-90">
-                Commencer
-              </Button>
+              <a href="#" className="text-gray-700 hover:text-green-600 transition-colors font-medium">Accueil</a>
+              <a href="#" className="text-gray-700 hover:text-green-600 transition-colors font-medium">Comment ça marche</a>
+              <Link to="/community" className="text-gray-700 hover:text-green-600 transition-colors font-medium">
+                Communauté
+              </Link>
+              <Link to="/get-started">
+                <Button className="gradient-eco text-white hover:opacity-90 shadow-md">
+                  Commencer
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </nav>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full max-w-md mx-auto mt-6 grid-cols-4 bg-white shadow-lg">
-          <TabsTrigger value="accueil" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
+        <TabsList className="grid w-full max-w-md mx-auto mt-6 grid-cols-4 bg-white shadow-lg rounded-xl">
+          <TabsTrigger 
+            value="accueil" 
+            className="data-[state=active]:gradient-eco data-[state=active]:text-white rounded-lg font-medium"
+          >
             <HomeIcon className="h-4 w-4 mr-2" />
             Accueil
           </TabsTrigger>
-          <TabsTrigger value="dashboard" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
+          <TabsTrigger 
+            value="dashboard" 
+            className="data-[state=active]:gradient-eco data-[state=active]:text-white rounded-lg font-medium"
+          >
             <TrendingUp className="h-4 w-4 mr-2" />
             Tableau
           </TabsTrigger>
-          <TabsTrigger value="collecte" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
+          <TabsTrigger 
+            value="collecte" 
+            className="data-[state=active]:gradient-eco data-[state=active]:text-white rounded-lg font-medium"
+          >
             <MapPin className="h-4 w-4 mr-2" />
             Collecte
           </TabsTrigger>
-          <TabsTrigger value="recompenses" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
+          <TabsTrigger 
+            value="recompenses" 
+            className="data-[state=active]:gradient-eco data-[state=active]:text-white rounded-lg font-medium"
+          >
             <Award className="h-4 w-4 mr-2" />
             Récompenses
           </TabsTrigger>
@@ -87,8 +105,8 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="gradient-eco p-2 rounded-xl">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="gradient-eco p-2 rounded-xl shadow-lg">
                   <Leaf className="h-6 w-6 text-white" />
                 </div>
                 <span className="text-xl font-bold">HackaFako</span>
@@ -108,7 +126,7 @@ const Index = () => {
             <div>
               <h3 className="font-semibold mb-4">Communauté</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Statistiques</a></li>
+                <li><Link to="/community" className="hover:text-white transition-colors">Communauté</Link></li>
                 <li><a href="#" className="hover:text-white transition-colors">Classements</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Success Stories</a></li>
               </ul>
